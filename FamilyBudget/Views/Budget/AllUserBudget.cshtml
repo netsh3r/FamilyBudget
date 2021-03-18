@@ -1,0 +1,13 @@
+﻿@using FamiliBudget.Serv.Entity
+
+@model User
+
+@{
+	var budgets = Model.Budgets.ToList();
+}
+@foreach (var budget in budgets)
+{
+	@Html.ActionLink(string.Format("бюджеты {0} пользователь {1}",budget.ID,budget.UserID), "UserBudget", "Budget", new { id = budget.ID }, new { htmlAttributes = new { @class = "btn btn-primary" } })
+}
+
+@Html.ActionLink("Создать", "CreateBudget", "Budget", new { userid = Model.ID }, new { htmlAttributes = new { @class = "btn" } })

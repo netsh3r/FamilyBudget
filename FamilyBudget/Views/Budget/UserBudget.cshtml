@@ -1,0 +1,228 @@
+﻿@using FamiliBudget.Serv.Entity;
+
+@model Budget
+@{ 
+	int index = 0;
+}
+
+<div class="container-fluid mt-2">
+	<div class="my-3 p-3 bg-white rounded shadow-sm" style="top:40px;">
+
+	</div>
+	<div class="my-3 p-3 bg-white rounded shadow-sm fixed-top" style="top:40px">
+		<div class="d-flex justify-content-center">
+			<span>
+				Итог:
+			</span>
+			<span class="allMonthAmount">
+				0
+			</span>
+		</div>
+	</div>
+
+	<div class="my-3 p-3 bg-white rounded shadow-sm" style="top:80px">
+		<div class="p-2 mb-2 bg-light text-dark  border-bottom">
+			<div class="row mb-3">
+				<div class="col-sm-1 themed-grid-col">Название</div>
+				<div class="col-sm-2 themed-grid-col">Количество в день</div>
+				<div class="col-sm-3 themed-grid-col">Дней в неделю</div>
+				<div class="col-sm-2 themed-grid-col">Недель в месяц</div>
+				<div class="col-sm-2 themed-grid-col">Стоимость</div>
+				<div class="col-sm-2 themed-grid-col">Итого</div>
+			</div>
+		</div>
+
+		@using (Html.BeginForm("Save", "Budget", FormMethod.Post))
+		{
+			@Html.HiddenFor(t => t.ID)
+			<input class="input-sm" type="hidden" name="UserID" value="@Model.UserID" />
+			<div>
+				@if (Model != null)
+				{
+
+					foreach (var position in Model.Positions)
+					{
+						<input type="hidden" value="@index" name="position_number" />
+						<div class="position_@index">
+							<div class="row mt-3">
+								<div class="col-md-1 themed-grid-col">
+									<input class="form-control" type="text" name="Positions[@index].Name" value="@position.Name" />
+								</div>
+								<div class="col-md-2 themed-grid-col">
+									<input class="form-control" type="text"
+										   name="Positions[@index].CountInDat" value="@position.CountInDat" onchange="changeAmount(@index)" />
+								</div>
+								<div class="col-md-3  themed-grid-col">
+									<input type="hidden" name="Positions[@index].DayInWeeks" value="@(position.DayInWeeks??"[]")" />
+									<input type="hidden" name="Positions[@index].DayInWeek" value="@(position.DayInWeek)" />
+									<div class="btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-light" id="DayInWeek_@(index)_0">
+											<input type="checkbox" name="DayInWeek_@index" value="0"
+												   onchange="changeAmount(@index)" /> Пн
+										</label>
+										<label class="btn btn-light" id="DayInWeek_@(index)_1">
+											<input type="checkbox" name="DayInWeek_@index" value="1"
+												   onchange="changeAmount(@index)" /> Вт
+										</label>
+										<label class="btn btn-light" id="DayInWeek_@(index)_2">
+											<input type="checkbox" name="DayInWeek_@index" value="2"
+												   onchange="changeAmount(@index)" /> Ср
+										</label>
+										<label class="btn btn-light" id="DayInWeek_@(index)_3">
+											<input type="checkbox" name="DayInWeek_@index" value="3"
+												   onchange="changeAmount(@index)" /> Чт
+										</label>
+										<label class="btn btn-light" id="DayInWeek_@(index)_4">
+											<input type="checkbox" name="DayInWeek_@index" value="4"
+												   onchange="changeAmount(@index)" /> Пт
+										</label>
+										<label class="btn btn-light" id="DayInWeek_@(index)_5">
+											<input type="checkbox" name="DayInWeek_@index" value="5"
+												   onchange="changeAmount(@index)" /> Сб
+										</label>
+										<label class="btn btn-light" id="DayInWeek_@(index)_6">
+											<input type="checkbox" name="DayInWeek_@index" value="6"
+												   onchange="changeAmount(@index)" /> Вс
+										</label>
+									</div>
+								</div>
+								<div class="col-md-2  themed-grid-col">
+									<div class="btn-group-toggle" data-toggle="buttons">
+										<input type="hidden" name="Positions[@index].WeekInMonths" value="@(position.WeekInMonths??"[]")" />
+										<input type="hidden" name="Positions[@index].WeekInMonth" value="@(position.WeekInMonth)" />
+										<label class="btn btn-light" id="WeekInMonth_@(index)_0">
+											<input type="checkbox" name="WeekInMonth_@index" value="1"
+												   onchange="changeAmount(@index)" /> 1
+										</label>
+										<label class="btn btn-light" id="WeekInMonth_@(index)_1">
+											<input type="checkbox" name="WeekInMonth_@index" value="2"
+												   onchange="changeAmount(@index)" /> 2
+										</label>
+										<label class="btn btn-light" id="WeekInMonth_@(index)_2">
+											<input type="checkbox" name="WeekInMonth_@index" value="3"
+												   onchange="changeAmount(@index)" /> 3
+										</label>
+										<label class="btn btn-light" id="WeekInMonth_@(index)_3">
+											<input type="checkbox" name="WeekInMonth_@index" value="4"
+												   onchange="changeAmount(@index)" /> 4
+										</label>
+									</div>
+								</div>
+								<div class="col-md-2  themed-grid-col">
+									<input class="form-control" type="text" name="Positions[@index].MonthAmount" value="@position.MonthAmount" onchange="changeAmount(@index)" />
+								</div>
+								<div class="col-md-1  themed-grid-col">
+									<input class="form-control" type="hidden" name="Positions[@index].Amount" value="@(position.CountInDat*position.DayInWeek*position.WeekInMonth*position.MonthAmount)" />
+									<span class="amount_@index">@(position.CountInDat*position.DayInWeek*position.WeekInMonth*position.MonthAmount)</span>
+								</div>
+								<div class="col-md-1 themed-grid-col">
+									<span class="btn btn-danger" onclick="deletePosition(@index)">удалить</span>
+								</div>
+							</div>
+						</div>
+						index++;
+					}
+				}
+				<div id="newPosition">
+
+				</div>
+
+				<div class="align-items-center w-100" style="margin-top:10px;">
+					<div class="btn btn-primary add_position">Добавить</div>
+					<input class="btn btn-success" type="submit" value="Сохранить" />
+				</div>
+			</div>
+		}
+
+	</div>
+</div>
+
+
+	<script>
+	function setDayMonth() {
+		var i =@(Model.Positions.Count-1);
+		if (i != -1) {
+			GetAllMonthAmount();
+			for (let index = 0; index <= i; index++) {
+				let dayInWeekInput = $('input[name="DayInWeek_' + index + '"]');
+				let dayInWeeksJson = $.parseJSON($("input[name='Positions[" + index + "].DayInWeeks'").val());
+				dayInWeekInput.each(function (i, input) {
+					if (dayInWeeksJson.indexOf(input.value)>-1) {
+						$('input[name="DayInWeek_' + index + '"]')[i].checked = true;
+						$('#DayInWeek_' + index + '_'+i+'').addClass("active");
+					}
+				});
+
+				let weekInMonthsInput = $('input[name="WeekInMonth_' + index + '"]');
+				let weekInMonthsJson = $.parseJSON($("input[name='Positions[" + index + "].WeekInMonths'").val());
+				weekInMonthsInput.each(function (i, input) {
+					if (weekInMonthsJson.indexOf(input.value) > -1) {
+						$('input[name="WeekInMonth_' + index + '"]')[i].checked = true;
+						$('#WeekInMonth_' + index + '_' + i + '').addClass("active");
+					}
+				});
+			}
+		}
+	}
+	setTimeout(setDayMonth, 100);
+	setTimeout(GetAllMonthAmount, 100);
+	$(function()
+	{
+		var i =@(Model.Positions.Count-1);
+		$('.add_position').bind("click", function () {
+			i++;
+			$.ajax({
+				type: 'GET',
+				url: '@Url.Action("GetPositionBlock")',
+				data: { index: i },
+				success: function (data) {
+					debugger;
+					$("#newPosition").append(data);
+				}
+			});
+		})
+
+	})
+	function changeAmount(index) {
+
+		var countInDat = Math.floor(document.getElementsByName('Positions[' + index + '].CountInDat')[0].value);
+		var dayInWeeks = $("input[name='DayInWeek_" + index + "']:checked");
+		let dayInWeeksJson = [];
+		dayInWeeks.each(function (i, input) {
+			dayInWeeksJson.push(input.value);
+		});
+		$("input[name='Positions[" + index + "].DayInWeek']").val(dayInWeeks.length);
+		$("input[name='Positions[" + index + "].DayInWeeks'").val(JSON.stringify(dayInWeeksJson));
+		var weekInMonths = $("input[name='WeekInMonth_" + index + "']:checked");
+		let weekInMonthsJson = [];
+		weekInMonths.each(function (i, input) {
+			weekInMonthsJson.push(input.value);
+		});
+		$("input[name='Positions[" + index + "].WeekInMonth']").val(weekInMonths.length);
+		$("input[name='Positions[" + index + "].WeekInMonths'").val(JSON.stringify(weekInMonthsJson));
+		var MonthAmount = Math.floor(document.getElementsByName('Positions[' + index + '].MonthAmount')[0].value);
+		$(".amount_" + index).html(countInDat * dayInWeeks.length * weekInMonths.length * MonthAmount);
+		$("input[name='Positions["+index+"].Amount']").val(countInDat * dayInWeeks.length * weekInMonths.length * MonthAmount);
+		GetAllMonthAmount();
+
+	}
+
+	function GetAllMonthAmount() {
+		let allPositions = $("input[name='position_number']");
+		let allMonthAmount = 0;
+		allPositions.each(function (index, input) {
+
+			debugger;
+			var countInDat = Math.floor(document.getElementsByName('Positions[' + index + '].CountInDat')[0].value);
+			var dayInWeeks = $("input[name='DayInWeek_" + index + "']:checked");
+			var weekInMonths = $("input[name='WeekInMonth_" + index + "']:checked");
+			var MonthAmount = Math.floor(document.getElementsByName('Positions[' + index + '].MonthAmount')[0].value);
+			allMonthAmount = allMonthAmount + (countInDat * dayInWeeks.length * weekInMonths.length * MonthAmount)
+		});
+		$('.allMonthAmount').text(allMonthAmount)
+	}
+	function deletePosition(index) {
+		let position = ".position_" + index;
+		$(position).remove();
+	}
+	</script>

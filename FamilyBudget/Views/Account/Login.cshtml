@@ -1,0 +1,25 @@
+﻿@using FamiliBudget.Serv.Entity
+@model User
+	
+<div class="d-flex justify-content-center mt-3">
+	@using (Html.BeginForm("Login","Account", FormMethod.Post,new { @class= "form-signin" }))
+	{
+		@Html.AntiForgeryToken()
+
+		@*<div class="form-signin">*@
+		<h1 class="h3 mb-3 font-weight-normal  text-center">Авторизация</h1>
+		@*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+		@*@Html.LabelFor(t => t.Login, htmlAttributes: new { @class = "control-label col-md-2" })*@
+		@Html.EditorFor(t => t.Login, new { htmlAttributes = new { placeholder="Введите логин",autocomplete = "off", @class = "form-control" } })
+		@Html.ValidationMessageFor(t => t.Login, "", new { @class = "text-danger" })
+		@*@Html.LabelFor(t => t.Password, htmlAttributes: new { @class = "control-label col-md-2" })*@
+		@Html.EditorFor(t => t.Password, new { htmlAttributes = new { placeholder = "Введите пароль", type = "password", @class = "form-control" } })
+		@Html.ValidationMessageFor(t => t.Password, "", new { @class = "text-danger", })
+		<div class="btn-group mt-2">
+			<input type="submit" value="Войти" class="btn btn-md btn-primary btn-block" />
+			@Html.ActionLink("Зарегистрироваться", "Registration", null, new { @class = "btn btn-secondary " })
+		</div>
+			
+		@*</div>*@
+	}
+</div>

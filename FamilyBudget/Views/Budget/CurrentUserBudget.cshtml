@@ -1,0 +1,20 @@
+﻿@using FamiliBudget.Serv.Entity
+
+@model List<Budget>
+
+<div class="container">
+
+	<div class="my-3 p-3 bg-white rounded shadow-sm">
+		<h6 class="border-bottom border-gray pb-2 mb-0">Бюджеты пользователя @(User.Identity.Name)</h6>
+		@foreach (var budget in Model)
+		{
+			<div class="media text-muted pt-3 border-bottom">
+				<p class="media-body pb-3 mb-0 small lh-125">
+					<strong class="d-block text-gray-dark">@(string.Format("бюджеты {0} пользователь {1}", budget.ID, budget.UserID))</strong>
+				</p>
+				@Html.ActionLink(string.Format("открыть", budget.ID, budget.UserID), "UserBudget", "Budget", new { id = budget.ID }, new { @class = "btn btn-link" })
+			</div>
+		}
+	</div>
+	@Html.ActionLink("Создать новый", "CreateBudget", "Budget", new { htmlAttributes = new { @class = "btn" } })
+</div>

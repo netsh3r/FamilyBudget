@@ -1,0 +1,54 @@
+﻿@using FamiliBudget.Serv.Entity
+
+@model User
+
+<div class="container mt-3">
+	<h1 class="h3 mb-3 font-weight-normal text-center">Данные пользователя</h1>
+	<div class="d-flex justify-content-center">
+		@using (Html.BeginForm())
+		{
+			@Html.HiddenFor(t=> t.ID)
+		<div class="row">
+			<div class="mb-3 col">
+				@Html.LabelFor(t => t.Login, htmlAttributes: new { @class = "" })
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text">@("@")</span>
+					</div>
+					@Html.EditorFor(t => t.Login, new { htmlAttributes = new { placeholder = "username", autocomplete = "off", @class = "form-control" } })
+					@Html.ValidationMessageFor(t => t.Login, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="mb-3 col">
+				@Html.LabelFor(t => t.Email, htmlAttributes: new { @class = "" })
+				<div class="input-group">
+					@Html.EditorFor(t => t.Email, new { htmlAttributes = new { placeholder = "test@email.ru", autocomplete = "true", type = "email", @class = "form-control" } })
+					@Html.ValidationMessageFor(t => t.Email, "", new { @class = "text-danger" })
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="mb-3 col">
+				@Html.LabelFor(t => t.TokenId, htmlAttributes: new { @class = "" })
+				<div class="input-group">
+					@Html.EditorFor(t => t.TokenId, new { htmlAttributes = new { placeholder = "test@email.ru", autocomplete = "true", type = "text", @class = "form-control" } })
+					@Html.ValidationMessageFor(t => t.TokenId, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="mb-3 col">
+				@Html.LabelFor(t => t.Password, htmlAttributes: new { @class = "" })
+				<div class="input-group">
+					@Html.EditorFor(t => t.Password, new { htmlAttributes = new { placeholder = "Пароль", autocomplete = "true", @class = "form-control" } })
+					@Html.ValidationMessageFor(t => t.Password, "", new { @class = "text-danger" })
+				</div>
+			</div>
+		</div>
+		<div class="d-flex justify-content-center">
+
+			<input type="submit" value="Сохранить" class="btn btn-md btn-success btn-block" />
+		</div>
+
+		}
+	</div>
+
+</div>
